@@ -1,0 +1,37 @@
+{
+	"name": "ggiemh-backend",
+	"version": "1.0.0",
+	"description": "REST API server for the Model Homes of the Golden Gate International Exposition website.",
+	"main": "server.js",
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsx watch src/server.ts",
+		"lint": "biome check --verbose",
+		"lint:fix": "biome check --write --no-errors-on-unmatched",
+		"start": "node dist/server.js",
+		"prepare": "husky"
+	},
+	"lint-staged": {
+		"*": "biome check --write --no-errors-on-unmatched --verbose"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tdkent/ggiemh-backend.git"
+	},
+	"author": "Tim Kent <timkentdev@gmail.com>",
+	"license": "ISC",
+	"type": "module",
+	"homepage": "https://github.com/tdkent/ggiemh-backend#readme",
+	"devDependencies": {
+		"@biomejs/biome": "2.3.12",
+		"@types/express": "^5.0.6",
+		"@types/node": "^25.0.10",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.2.7",
+		"tsx": "^4.21.0",
+		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"express": "^5.2.1"
+	}
+}
