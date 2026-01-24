@@ -7,3 +7,5 @@ This documentation is for the **API server** of the content-driven website chron
 - Language: TypeScript
 - Framework: Express.js
 - Database: MongoDB
+- Lint &amp; Format: Biome
+- Precommit Hooks: Husky &amp; lint-staged
