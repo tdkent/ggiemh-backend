@@ -8,10 +8,10 @@ interface Config {
 }
 
 const config: Config = {
-	mongoCluster: process.env.MONGODB_CLUSTER!,
-	mongoPassword: process.env.MONGODB_PASSWORD!,
-	mongoUser: process.env.MONGODB_USERNAME!,
-	port: Number(process.env.PORT!),
+	mongoCluster: process.env.MONGODB_CLUSTER as string,
+	mongoPassword: process.env.MONGODB_PASSWORD as string,
+	mongoUser: process.env.MONGODB_USERNAME as string,
+	port: Number(process.env.PORT),
 };
 
 export default config;
