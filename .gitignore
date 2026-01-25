@@ -5,7 +5,8 @@ node_modules
 dist
 tsconfig.tsbuildinfo
 
-# Environment Variables
+# Config
+.vscode
 .env
 
 # Misc
