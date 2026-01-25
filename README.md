@@ -8,4 +8,18 @@ This documentation is for the **API server** of the content-driven website chron
 - Framework: Express.js
 - Database: MongoDB
 - Lint &amp; Format: Biome
-- Precommit Hooks: Husky &amp; lint-staged
+- Testing: Vitest
+
+## Routes
+
+### Root
+
+Health check route sends status code 200. Used by AWS Application Load Balancer (ALB) to monitor health of EC2 instances.
+
+#### GET /
+
+Response:
+
+```
+200 OK
+```
