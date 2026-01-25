@@ -8,6 +8,7 @@
     // Environment Settings
     "module": "nodenext",
     "target": "esnext",
+    "moduleResolution": "nodenext",
 
     // For nodejs:
     "lib": ["esnext"],
@@ -43,7 +44,15 @@
     "strictNullChecks": true,
     "noImplicitAny": true,
     "strictBindCallApply": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+
+    // Paths
+    "baseUrl": ".",
+    "paths": {
+      "@config/*": ["src/config/*"],
+      "@middleware/*": ["src/middleware/*"],
+      "@/*": ["src/*"]
+    },
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
