@@ -51,6 +51,7 @@
     "paths": {
       "@config/*": ["src/config/*"],
       "@middleware/*": ["src/middleware/*"],
+      "@routes/*": ["src/routes/*"],
       "@/*": ["src/*"]
     },
   },

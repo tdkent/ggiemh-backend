@@ -7,3 +7,9 @@
 # Sends status code 200.
 
 GET {{localBaseUrl}}
+
+### Get All Homes
+# GET /homes
+# Sends a list of all homes in the database.
+
+GET {{localBaseUrl}}/homes
