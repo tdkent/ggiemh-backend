@@ -5,6 +5,7 @@ interface Config {
 	mongoDbName: string;
 	mongoUser: string;
 	mongoPassword: string;
+	nodeEnv: 'dev';
 	port: number;
 }
 
@@ -13,6 +14,7 @@ const config: Config = {
 	mongoDbName: process.env.MONGODB_DB_NAME as string,
 	mongoPassword: process.env.MONGODB_PASSWORD as string,
 	mongoUser: process.env.MONGODB_USERNAME as string,
+	nodeEnv: process.env.NODE_ENV as 'dev',
 	port: Number(process.env.PORT),
 };
 

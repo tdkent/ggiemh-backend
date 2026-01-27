@@ -13,3 +13,6 @@ GET {{localBaseUrl}}
 # Sends a list of all homes in the database.
 
 GET {{localBaseUrl}}/homes
+
+### Test 404
+GET {{localBaseUrl}}/helloworld
