@@ -1,8 +1,11 @@
 import { defaultErrorHandler, routeNotFound } from '@middleware/errors.middleware.js';
+import logRequest from '@middleware/logs.middleware.js';
 import homesRouter from '@routes/homes.routes.js';
 import express from 'express';
 
 const app = express();
+
+app.use(logRequest);
 
 app.get('/', (_req, res) => {
 	res.sendStatus(200);
