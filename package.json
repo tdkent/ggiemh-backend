@@ -1,5 +1,6 @@
 {
 	"name": "ggiemh-backend",
+	"private": true,
 	"version": "1.0.0",
 	"description": "REST API server for the Model Homes of the Golden Gate International Exposition website.",
 	"main": "server.js",
@@ -20,7 +21,6 @@
 		"url": "git+https://github.com/tdkent/ggiemh-backend.git"
 	},
 	"author": "Tim Kent <timkentdev@gmail.com>",
-	"license": "ISC",
 	"type": "module",
 	"homepage": "https://github.com/tdkent/ggiemh-backend#readme",
 	"devDependencies": {
