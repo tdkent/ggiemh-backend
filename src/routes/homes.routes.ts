@@ -1,5 +1,5 @@
 import express from 'express';
-import { getHomes } from '@/services/homes.services.js';
+import { getHome, getHomes } from '@/services/homes.services.js';
 
 const router = express.Router();
 
@@ -8,17 +8,26 @@ router.get('/', async (_req, res) => {
 	res.send(homes);
 });
 
-router.param('/:id', async (req, res, next, id) => {
-	console.log(id);
-	// validate id
-	// fetch home
-	// call getHome()
-	// add home to req
+router.param('id', async (req, res, next, id) => {
+	const validId = Number(id);
+
+	if (
+		!validId ||
+		validId < 1 ||
+		validId > 30 ||
+		validId === 13 ||
+		validId === 22
+	) {
+		res.status(400).send('Invalid request');
+	}
+
+	const home = await getHome(validId);
+	req.home = home;
 	next();
 });
 
-router.get('/:id', async (req, res) => {
-	res.send('hello world');
+router.get('/:id', (req, res) => {
+	res.send(req.home);
 });
 
 export default router;

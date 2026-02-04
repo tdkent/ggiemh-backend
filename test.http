@@ -22,3 +22,6 @@ GET {{localBaseUrl}}/homes/1
 
 ### Test 404
 GET {{localBaseUrl}}/helloworld
+
+### Test 400
+GET {{localBaseUrl}}/homes/-1

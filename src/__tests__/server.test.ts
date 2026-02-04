@@ -32,7 +32,7 @@ describe('Homes route', () => {
 	});
 
 	describe('GET /homes/:id', async () => {
-		it('sends 404 error if id is not a number', async () => {
+		it('sends 400 error if id is not a number', async () => {
 			return request(app).get('/homes/bad-route').expect(400);
 		});
 
