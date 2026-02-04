@@ -7,8 +7,9 @@ This documentation is for the **API server** of the content-driven website chron
 - Language: TypeScript
 - Framework: Express.js
 - Database: MongoDB
-- Lint &amp; Format: Biome
+- Lint &amp; Format: Biome w/Husky pre-commit
 - Testing: Vitest
+- Logging: Winston
 
 ## Routes
 
@@ -22,4 +23,16 @@ Response:
 
 ```
 200 OK
+```
+
+### Homes
+
+Query all model homes or a single home.
+
+#### GET /homes
+
+Response:
+
+```
+200 OK - A list of all homes
 ```
