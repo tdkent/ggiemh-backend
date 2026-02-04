@@ -27,4 +27,12 @@ describe('Homes route', () => {
 				expect(res.body).toEqual([{ id: 1 }]);
 			});
 	});
+
+	describe('GET /homes/:id', async () => {
+		it('sends 400 error if id is not a number', async () => {});
+
+		it('sends 400 error if id is not a valid number', async () => {});
+
+		it('sends the correct home document for a valid id', async () => {});
+	});
 });
