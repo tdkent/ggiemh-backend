@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
 interface Config {
+	frontendUrl: string;
 	mongoCluster: string;
 	mongoDbName: string;
 	mongoUser: string;
@@ -10,6 +11,7 @@ interface Config {
 }
 
 const config: Config = {
+	frontendUrl: process.env.FRONTEND_URL as string,
 	mongoCluster: process.env.MONGODB_CLUSTER as string,
 	mongoDbName: process.env.MONGODB_DB_NAME as string,
 	mongoPassword: process.env.MONGODB_PASSWORD as string,
