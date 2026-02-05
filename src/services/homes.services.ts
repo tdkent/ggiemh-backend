@@ -8,3 +8,11 @@ export async function getHomes() {
 		.toArray();
 	return homes;
 }
+
+export async function getHome(id: number) {
+	const db = getDb();
+	const home = await db
+		.collection('homes')
+		.findOne({ id }, { projection: { _id: 0 } });
+	return home;
+}

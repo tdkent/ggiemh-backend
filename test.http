@@ -14,5 +14,14 @@ GET {{localBaseUrl}}
 
 GET {{localBaseUrl}}/homes
 
+### Get Single Home
+# GET /homes/:id
+# Sends a single home by id.
+
+GET {{localBaseUrl}}/homes/1
+
 ### Test 404
 GET {{localBaseUrl}}/helloworld
+
+### Test 400
+GET {{localBaseUrl}}/homes/-1
