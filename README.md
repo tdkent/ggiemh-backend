@@ -1,8 +1,59 @@
 # Model Homes of the Golden Gate International Exposition, 1939-40
 
-This documentation is for the **API server** of the content-driven website chronicling the history of the model homes built in the San Francisco Bay Area for the 1939-40 World's Fair.
+> This documentation is for the **Node.js backend** of [ggiemh.com](https://ggiemh.com).
 
-## Tech Stack
+## About
+
+### Description
+
+`ggiemh.com` is a content-driven website that documents the rediscovered "model homes" built around the San Francisco Bay Area for the Model Home project of the Golden Gate International Exposition, a World's Fair held on Treasure Island in 1939-40. This application is a REST API handling requests for data about the homes. The application emphasizes solid architecture, reliability testing, security, and automated cloud deployment. 
+
+### Local Development
+
+#### Requirements
+
+- Node.js 24 installed
+- MongoDB access
+  - User credentials
+  - Connection string
+
+
+```bash
+# Install deps
+npm install
+
+# Run app in dev mode
+npm run dev
+
+# Lint and fix
+npm run lint:fix
+
+# Run tests
+npm run test
+
+# Build
+npm run build
+```
+
+#### Environment variables
+
+```
+.env
+
+PORT=<port number>
+NODE_ENV=dev
+
+# Uses default Vite port
+FRONTEND_URL=http://localhost:5173
+
+# Mongo
+MONGODB_CLUSTER=<cluster id>
+MONGODB_USERNAME=<your-username>
+MONGODB_PASSWORD=<your-password>
+MONGODB_DB_NAME=<db-name>
+```
+
+### Tech Stack
 
 - Language: TypeScript
 - Framework: Express.js
@@ -11,28 +62,33 @@ This documentation is for the **API server** of the content-driven website chron
 - Testing: Vitest
 - Logging: Winston
 
-## Routes
+## Endpoints
 
-### Root
+| **Method**  | **Endpoint** | **Description** | **Access** |
+| ------------- | ------------- | ------------- | ------------- |
+| GET  | `/` | Health check route sends code `200` | Public |
+| GET  | `/homes` | Sends a list of all homes | Public |
+| GET  |`/homes/:id` | Sends a single home, or error code `400` if `id` is invalid | Public |
 
-Health check route sends status code 200. Used by AWS Application Load Balancer (ALB) to monitor health of EC2 instances.
+## Security
 
-#### GET /
+- **CORS**: restricts resource sharing to `ggiemh.com` and local development origins.
 
-Response:
+Planned: 
 
-```
-200 OK
-```
+- Reverse proxy: configure with NGINX
+- Rate limiting: configure with NGINX
+- Helmet: adds security headers to HTTP responses to help prevent a variety of attacks.
 
-### Homes
+## Deployment
 
-Query all model homes or a single home.
+### CI/CD
 
-#### GET /homes
+Continuous integration is managed via a GitHub Actions deployment workflow. New and updated pull requests trigger a workflow that lints and tests the codebase, ensuring reliability before merging new code into the `main` branch.
 
-Response:
+The pipeline will continue to be developed with a continuous delivery workflow to automatically test, create, and deploy new builds to the cloud.
 
-```
-200 OK - A list of all homes
-```
+## Additional Information
+
+- [Frontend repository](https://github.com/tdkent/ggiemh-frontend)
+- [Visit ggiemh.com](https://ggiemh.com)
