@@ -6,7 +6,7 @@ interface HttpError extends Error {
 }
 
 export function routeNotFound(_req: Request, res: Response) {
-	res.status(404).send('Resource not found');
+	res.status(404).json('Resource not found');
 }
 
 export function defaultErrorHandler(
@@ -23,5 +23,5 @@ export function defaultErrorHandler(
 
 	const status = error.statusCode || 500;
 
-	res.status(status).send(error.message || 'Internal server error');
+	res.status(status).json(error.message || 'Internal server error');
 }
