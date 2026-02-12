@@ -1,16 +1,18 @@
-FROM node:24-alpine
+# Creates a build of all files, the copies and runs only dist
 
+# Build
+FROM node:24-alpine AS builder
 WORKDIR /app
-
-# Copy package.json and package-lock.json first to leverage Docker caching
-COPY package*.json ./
-
+COPY package.json package-lock.json ./
 RUN npm install
-
 COPY . .
-
 RUN npm run build
 
+# Run
+FROM node:24-alpine
+WORKDIR /app
+COPY --from=builder /app/package.json /app/package-lock.json ./
+RUN npm install --omit=dev --ignore-scripts
+COPY --from=builder ./app/dist ./dist
 EXPOSE 3000
-
-CMD ["npm", "start"]
+CMD ["node", "dist/server.js"]
