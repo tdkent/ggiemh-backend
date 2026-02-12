@@ -1,4 +1,4 @@
-name: 'Deploy Backend Application'
+name: 'Test Code'
 on:
   pull_request: 
     types:
@@ -10,7 +10,7 @@ on:
   
   workflow_dispatch: 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -27,22 +27,7 @@ jobs:
       
       - name: Lint code
         run: npm run lint
-    
-  test:
-    needs: lint
-    runs-on: 'ubuntu-latest'
-    steps:
-      - name: Get code
-        uses: actions/checkout@v6
 
-      - name: Cache deps
-        uses: actions/cache@v5
-        with:
-          path: ~/.npm
-          key: deps-node-module-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install deps
-        run: npm ci
-      
       - name: Test code
         run: npm run test
+      
