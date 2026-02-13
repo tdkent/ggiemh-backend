@@ -4,7 +4,7 @@ import winston from 'winston';
 const { combine, errors, json, prettyPrint, timestamp } = winston.format;
 
 export const logger = winston.createLogger({
-	level: config.nodeEnv === 'dev' ? 'info' : 'error',
+	level: config.nodeEnv === 'production' ? 'error' : 'info',
 	format: combine(
 		errors({ trace: true }),
 		timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
