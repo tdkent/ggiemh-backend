@@ -10,7 +10,7 @@
 		"lint": "biome check --verbose",
 		"lint:fix": "biome check --write --no-errors-on-unmatched",
 		"prepare": "husky",
-		"start": "node dist/server.js",
+		"start": "NODE_ENV=production node dist/server.js",
 		"test": "vitest"
 	},
 	"lint-staged": {

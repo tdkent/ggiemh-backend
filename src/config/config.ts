@@ -6,17 +6,22 @@ interface Config {
 	mongoDbName: string;
 	mongoUser: string;
 	mongoPassword: string;
-	nodeEnv: 'dev';
+	nodeEnv: 'production' | undefined;
 	port: number;
 }
 
+const frontendUrl =
+	process.env.NODE_ENV === 'production'
+		? (process.env.FRONTEND_URL as string)
+		: 'http://localhost:5173';
+
 const config: Config = {
-	frontendUrl: process.env.FRONTEND_URL as string,
+	frontendUrl,
 	mongoCluster: process.env.MONGODB_CLUSTER as string,
 	mongoDbName: process.env.MONGODB_DB_NAME as string,
 	mongoPassword: process.env.MONGODB_PASSWORD as string,
 	mongoUser: process.env.MONGODB_USERNAME as string,
-	nodeEnv: process.env.NODE_ENV as 'dev',
+	nodeEnv: process.env.NODE_ENV as 'production' | undefined,
 	port: Number(process.env.PORT),
 };
 

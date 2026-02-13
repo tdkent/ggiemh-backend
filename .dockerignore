@@ -6,3 +6,6 @@ Dockerfile
 test.http
 .github
 .husky
+nginx.conf
+docker-compose.yml
+README.md
