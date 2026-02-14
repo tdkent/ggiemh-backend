@@ -1,11 +1,10 @@
 node_modules
 dist
+build
 Dockerfile
 .dockerignore
 .vscode
 test.http
 .github
 .husky
-nginx.conf
-docker-compose.yml
 README.md
