@@ -6,6 +6,7 @@ on:
     paths-ignore: 
       - ".github/workflows/*"
       - "README.md"
+      - ".gitignore"
 
   pull_request: 
     types:
@@ -14,6 +15,7 @@ on:
     paths-ignore: 
       - ".github/workflows/*"
       - "README.md"
+      - ".gitignore"
   
   workflow_dispatch: 
 jobs:
