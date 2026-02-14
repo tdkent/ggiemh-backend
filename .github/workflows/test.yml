@@ -1,26 +1,31 @@
+### RUN ON: 
+# PR opened or synchronized.
+
+### JOBS:
+# Lint code and run automated tests.
+
 name: 'Test Code'
 on:
-  push:
-    branches:
-      - main
-    paths-ignore: 
-      - ".github/workflows/*"
-      - "README.md"
-      - ".gitignore"
-
   pull_request: 
     types:
       - opened
-      - edited
+      - synchronize
     paths-ignore: 
-      - ".github/workflows/*"
-      - "README.md"
+      - ".github/**"
+      - ".husky/**"
       - ".gitignore"
+      - ".dockerignore"
+      - "test.http"
+      - "README.md"
   
   workflow_dispatch: 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
     steps:
       - name: Get code
         uses: actions/checkout@v6

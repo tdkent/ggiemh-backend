@@ -1,32 +1,97 @@
-# Run workflow after new image uploaded to Docker Hub
+### RUN ON:
+# Push to main branch.
 
-# If build artifacts have changed:
-### Upload build artifacts to S3 
-### Transfer artifacts from S3 to EC2
-
-# From EC2 instance:
-### Stop and remove containers 
-### Pull latest builds from Docker Hub
-### Build containers and run 
+### JOBS:
+# Build and push Docker image to Docker Hub.
+# Check build artifacts for changes.
+# Push artifacts to S3 if changed.
+# Copy artifacts to EC2 if changed.
+# Build and start containers in EC2.
 
 name: 'Deploy Application'
 
 on:
-  workflow_run:
-    workflows: 
-      - 'Deploy to Docker Hub'
-    types:
-      - completed
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - ".github/**"
+      - ".husky/**"
+      - ".gitignore"
+      - "test.http"
+      - "README.md"
       
   workflow_dispatch:
 
 jobs:
-  upload_artifacts:
+  docker:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        platforms: linux/amd64,linux/arm64
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/ggiemh:latest
+
+  # Use dorny/path-filter action to set filters on artifact files
+  check_artifacts:
+    needs: docker
+    runs-on: ubuntu-latest
+
+    permissions: 
+      contents: read
+    
+    outputs:
+      docker: ${{ steps.filter.outputs.docker }}
+      nginx: ${{ steps.filter.outputs.nginx }}
+    
+    steps:
+      - name: Get code
+        uses: actions/checkout@v6
+
+      - name: Check artifact changes
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            docker:
+              - './build/docker-compose.yml'
+            nginx:
+              - './build/nginx.conf'
+
+  upload_artifacts:
+    needs: check_artifacts
+
+    # Check filters to determine if job should run
+    if: 
+      ${{ needs.check_artifacts.outputs.docker == 'true' || needs.check_artifacts.outputs.nginx == 'true' }}
+    
+    runs-on: ubuntu-latest
+    
     permissions: 
       contents: read
 
     steps:
+      - name: Get code
+        uses: actions/checkout@v6
+        
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -34,8 +99,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Upload artifacts
+        run: |
+          aws s3 cp ./build/docker-compose.yml s3://${{ secrets.S3_BUCKET }}/
+          aws s3 cp ./build/nginx.conf s3://${{ secrets.S3_BUCKET }}/
+      
       - name: Read from bucket
         run: |
           aws s3 ls s3://${{ secrets.S3_BUCKET }}
-      
-      
