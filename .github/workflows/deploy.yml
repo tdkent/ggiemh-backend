@@ -27,6 +27,9 @@ jobs:
       contents: read
 
     steps:
+      - name: Get code
+        uses: actions/checkout@v6
+        
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -37,5 +40,8 @@ jobs:
       - name: Read from bucket
         run: |
           aws s3 ls s3://${{ secrets.S3_BUCKET }}
-      
-      
+
+      - name: Upload artifacts
+        run: |
+          aws s3 cp docker-compose.yml s3://${{ secrets.S3_BUCKET }}/
+          aws s3 cp nginx.conf s3://${{ secrets.S3_BUCKET }}/
