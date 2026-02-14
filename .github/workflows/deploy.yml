@@ -101,8 +101,8 @@ jobs:
 
       - name: Upload artifacts
         run: |
-          aws s3 cp docker-compose.yml s3://${{ secrets.S3_BUCKET }}/
-          aws s3 cp nginx.conf s3://${{ secrets.S3_BUCKET }}/
+          aws s3 cp ./build/docker-compose.yml s3://${{ secrets.S3_BUCKET }}/
+          aws s3 cp ./build/nginx.conf s3://${{ secrets.S3_BUCKET }}/
       
       - name: Read from bucket
         run: |
