@@ -1,0 +1,37 @@
+# Run workflow after new image uploaded to Docker Hub
+
+# If build artifacts have changed:
+### Upload build artifacts to S3 
+### Transfer artifacts from S3 to EC2
+
+# From EC2 instance:
+### Stop and remove containers 
+### Pull latest builds from Docker Hub
+### Build containers and run 
+
+name: 'Deploy Application'
+
+on:
+  workflow_run:
+    workflows: 
+      - 'Deploy to Docker Hub'
+    types:
+      - completed
+      
+  workflow_dispatch:
+
+jobs:
+  upload_artifacts:
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: read
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      
+      

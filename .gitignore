@@ -8,6 +8,7 @@ tsconfig.tsbuildinfo
 # Config
 .vscode
 .env
+*.pem
 
 # Misc
 .DS_Store
