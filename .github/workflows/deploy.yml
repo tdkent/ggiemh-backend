@@ -20,9 +20,43 @@ on:
       
   workflow_dispatch:
 
+
 jobs:
-  upload_artifacts:
+
+  # Use dorny/path-filter action to set filters on artifact files
+  check_artifacts:
     runs-on: ubuntu-latest
+
+    permissions: 
+      contents: read
+    
+    outputs:
+      docker: ${{ steps.filter.outputs.docker }}
+      nginx: ${{ steps.filter.outputs.nginx }}
+    
+    steps:
+      - name: Get code
+        uses: actions/checkout@v6
+
+      - name: Check artifact changes
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            docker:
+              - 'docker-compose.yml'
+            nginx:
+              - 'nginx.conf'
+
+  upload_artifacts:
+    needs: check_artifacts
+
+    # Check filters to determine if job should run
+    if: 
+      ${{ needs.check_artifacts.outputs.docker == 'true' || needs.check_artifacts.outputs.nginx == 'true' }}
+    
+    runs-on: ubuntu-latest
+    
     permissions: 
       contents: read
 
@@ -37,11 +71,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Read from bucket
-        run: |
-          aws s3 ls s3://${{ secrets.S3_BUCKET }}
-
       - name: Upload artifacts
         run: |
           aws s3 cp docker-compose.yml s3://${{ secrets.S3_BUCKET }}/
           aws s3 cp nginx.conf s3://${{ secrets.S3_BUCKET }}/
+      
+      - name: Read from bucket
+        run: |
+          aws s3 ls s3://${{ secrets.S3_BUCKET }}
