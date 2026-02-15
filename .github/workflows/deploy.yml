@@ -143,5 +143,5 @@ jobs:
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
             --comment "Stop containers, pull and restart, prune" \
-            --parameters commands="cd app && docker compose down && docker compose up -d --pull always" \
+            --parameters commands="cd home/ec2-user/app && docker compose down && docker compose up -d --pull always" \
             --region ${{ secrets.AWS_REGION }}
