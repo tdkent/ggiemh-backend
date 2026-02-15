@@ -129,16 +129,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       
-      - name: Copy artifacts to EC2
-        run: |
-          aws s3 cp s3://${{ secrets.S3_BUCKET }}/docker-compose.yml my_copied_file.ext
-          aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf my_copied_file.ext
-
-      - name: Trigger EC2 to pull artifacts
+      - name: Pull artifacts and deploy in EC2
         run: |
           aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
             --comment "Deploy updated artifacts from S3" \
-            --parameters commands="aws s3 cp s3://${{ secrets.S3_BUCKET }}/docker-compose.yml /home/ec2-user/app/docker-compose.yml && aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf /home/ec2-user/app/nginx.conf
+            --parameters commands="aws s3 cp s3://${{ secrets.S3_BUCKET }}/docker-compose.yml /home/ec2-user/app/docker-compose.yml && aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf /home/ec2-user/app/nginx.conf"
             --region ${{ secrets.AWS_REGION }}
