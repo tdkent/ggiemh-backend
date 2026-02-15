@@ -24,8 +24,6 @@ on:
 
 jobs:
   docker:
-    # skip this step (temp)
-    if: false  
     runs-on: ubuntu-latest
 
     permissions:
@@ -119,7 +117,6 @@ jobs:
     
     steps:
       - name: Get code
-        if: false
         uses: actions/checkout@v6
         
       - name: Configure AWS credentials
@@ -129,8 +126,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       
-      - name: Pull artifacts and deploy in EC2
-        if: false
+      - name: Pull artifacts to EC2
         run: |
           aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
