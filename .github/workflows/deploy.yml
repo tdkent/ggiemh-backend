@@ -133,6 +133,6 @@ jobs:
           aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
-            --comment "Deploy updated artifacts from S3" \
-            --parameters commands="aws s3 cp s3://${{ secrets.S3_BUCKET }}/docker-compose.yml /home/ec2-user/app/docker-compose.yml && aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf /home/ec2-user/app/nginx.conf" \
+            --comment "Pull and deploy artifacts from S3" \
+            --parameters commands="aws s3 cp s3://${{ secrets.S3_BUCKET }}/docker-compose.yml /home/ec2-user/app/docker-compose.yml && aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf /home/ec2-user/app/nginx.conf && docker compose down && docker compose up -d --pull always" \
             --region ${{ secrets.AWS_REGION }}
