@@ -148,7 +148,7 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Debug user and path" \
             --parameters commands="\
-              whoami && pwd && ls -la && \
+              whoami && pwd && \
               cd ../../ && pwd && ls -la" \
             --region ${{ secrets.AWS_REGION }}
 
