@@ -134,7 +134,9 @@ jobs:
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
             --comment "Pull artifacts from S3" \
-            --parameters commands="aws s3 cp s3://${{ secrets.S3_BUCKET }}/docker-compose.yml /home/ec2-user/app/docker-compose.yml && aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf /home/ec2-user/app/nginx.conf" \
+            --parameters commands="\
+              aws s3 cp s3://${{ secrets.S3_BUCKET }}/docker-compose.yml /home/ec2-user/app/docker-compose.yml && \
+              aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf /home/ec2-user/app/nginx.conf" \
             --region ${{ secrets.AWS_REGION }}
 
       - name: Cycle Docker compose
@@ -143,5 +145,8 @@ jobs:
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
             --comment "Stop containers, pull and restart, prune" \
-            --parameters commands="cd home/ec2-user/app && docker compose down && docker compose up -d --pull always" \
+            --parameters commands="\
+              cd home/ec2-user/app && \ 
+              /usr/bin/docker compose down && \ 
+              /usr/bin/docker compose up -d --pull always" \
             --region ${{ secrets.AWS_REGION }}
