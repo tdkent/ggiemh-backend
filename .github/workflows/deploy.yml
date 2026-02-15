@@ -146,7 +146,8 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Debug user and path" \
             --parameters commands="\
-              whoami && pwd && ls -la" \
+              whoami && pwd && ls -la && \
+              cd ../../ && pwd && ls -la" \
             --region ${{ secrets.AWS_REGION }}
 
       # - name: Cycle Docker compose
