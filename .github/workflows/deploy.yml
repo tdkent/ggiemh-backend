@@ -146,6 +146,7 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Stop containers, pull and restart, prune" \
             --parameters commands="\
+              set -euxo pipefail && \
               whoami && pwd && la -la \
               cd home/ec2-user/app && \ 
               /usr/bin/docker compose down && \ 
