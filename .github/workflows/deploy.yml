@@ -139,16 +139,25 @@ jobs:
               aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf /home/ec2-user/app/nginx.conf" \
             --region ${{ secrets.AWS_REGION }}
 
-      - name: Cycle Docker compose
+      - name: Debug
         run: |
           aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
-            --comment "Stop containers, pull and restart, prune" \
+            --comment "Debug user and path" \
             --parameters commands="\
-              set -euxo pipefail && \
-              whoami && pwd && la -la \
-              cd home/ec2-user/app && \ 
-              /usr/bin/docker compose down && \ 
-              /usr/bin/docker compose up -d --pull always" \
+              whoami && pwd && ls -la" \
             --region ${{ secrets.AWS_REGION }}
+
+      # - name: Cycle Docker compose
+      #   run: |
+      #     aws ssm send-command \
+      #       --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
+      #       --document-name "AWS-RunShellScript" \
+      #       --comment "Stop containers, pull and restart, prune" \
+      #       --parameters commands="\
+      #         whoami && pwd && ls -la \
+      #         cd home/ec2-user/app && \ 
+      #         /usr/bin/docker compose down && \ 
+      #         /usr/bin/docker compose up -d --pull always" \
+      #       --region ${{ secrets.AWS_REGION }}
