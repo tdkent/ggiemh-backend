@@ -107,3 +107,35 @@ jobs:
       - name: Read from bucket
         run: |
           aws s3 ls s3://${{ secrets.S3_BUCKET }}
+
+  deploy_build:
+    needs: upload_artifacts
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Get code
+        uses: actions/checkout@v6
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      
+      - name: Copy artifacts to EC2
+        run: |
+          aws s3 cp s3://${{ secrets.S3_BUCKET }}/docker-compose.yml my_copied_file.ext
+          aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf my_copied_file.ext
+
+      - name: Trigger EC2 to pull artifacts
+        run: |
+          aws ssm send-command \
+            --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploy updated artifacts from S3" \
+            --parameters commands="aws s3 cp s3://${{ secrets.S3_BUCKET }}/docker-compose.yml /home/ec2-user/app/docker-compose.yml && aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf /home/ec2-user/app/nginx.conf
+            --region ${{ secrets.AWS_REGION }}
