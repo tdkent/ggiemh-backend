@@ -149,7 +149,8 @@ jobs:
             --comment "Debug user and path" \
             --parameters commands="\
               whoami && pwd && \
-              cd ../../ && pwd && ls -la" \
+              sudo su - ec2-user && \ 
+              pwd && ls -la" \
             --region ${{ secrets.AWS_REGION }}
 
       # - name: Cycle Docker compose
