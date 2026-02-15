@@ -25,6 +25,8 @@ on:
 
 jobs:
   docker:
+    # skip this step (temp)
+    if: false  
     runs-on: ubuntu-latest
 
     permissions:
@@ -110,6 +112,7 @@ jobs:
 
   deploy_build:
     needs: upload_artifacts
+    if: always()
     runs-on: ubuntu-latest
 
     permissions:
