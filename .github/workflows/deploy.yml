@@ -141,28 +141,17 @@ jobs:
               aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf /home/ec2-user/app/nginx.conf" \
             --region ${{ secrets.AWS_REGION }}
 
-      # - name: Debug
-      #   run: |
-      #     aws ssm send-command \
-      #       --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
-      #       --document-name "AWS-RunShellScript" \
-      #       --comment "Debug user and path" \
-      #       --parameters commands="\
-      #         sudo su - ec2-user && \ 
-      #         whoami && \
-      #         cd && \ 
-      #         pwd && ls" \
-      #       --region ${{ secrets.AWS_REGION }}
-
       - name: Cycle Docker compose
         run: |
           aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
             --comment "Stop containers, pull and restart, prune" \
-            --parameters commands="\
-              echo '${{ secrets.DOCKERHUB_TOKEN }}' | \
-              /usr/bin/docker login --username '${{ secrets.DOCKERHUB_USERNAME }}' --password-stdin && \
-              /usr/bin/docker compose -f /home/ec2-user/app/docker-compose.yml down && \
-              /usr/bin/docker compose -f /home/ec2-user/app/docker-compose.yml up -d --pull always" \
+            --parameters '{
+              "commands": [
+                "echo ${{ secrets.DOCKERHUB_TOKEN }} | /usr/bin/docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin",
+                "/usr/bin/docker compose -f /home/ec2-user/app/docker-compose.yml down",
+                "/usr/bin/docker compose -f /home/ec2-user/app/docker-compose.yml up -d --pull always"
+              ]
+            }' \
             --region ${{ secrets.AWS_REGION }}
