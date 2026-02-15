@@ -161,6 +161,10 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Stop containers, pull and restart, prune" \
             --parameters commands="\
+              echo '${{ secrets.DOCKERHUB_TOKEN }}' | \
+                /usr/bin/docker login \
+                  --username '${{ secrets.DOCKERHUB_USERNAME }}' \
+                  --password-stdin && \
               /usr/bin/docker compose -f /home/ec2-user/app/docker-compose.yml down && \
               /usr/bin/docker compose -f /home/ec2-user/app/docker-compose.yml up -d --pull always" \
             --region ${{ secrets.AWS_REGION }}
