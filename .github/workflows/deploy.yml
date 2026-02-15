@@ -152,7 +152,7 @@ jobs:
                 "echo ${{ secrets.DOCKERHUB_TOKEN }} | /usr/bin/docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin",
                 "/usr/bin/docker compose -f /home/ec2-user/app/docker-compose.yml down",
                 "/usr/bin/docker compose -f /home/ec2-user/app/docker-compose.yml up -d --pull always",
-                "/usr/bin/docker system prune -a"
+                "/usr/bin/docker system prune -a -f"
               ]
             }' \
             --region ${{ secrets.AWS_REGION }}
