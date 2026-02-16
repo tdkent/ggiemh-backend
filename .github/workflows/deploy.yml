@@ -2,11 +2,10 @@
 # Push to main branch.
 
 ### JOBS:
-# Build and push Docker image to Docker Hub.
-# Check build artifacts for changes.
-# Push artifacts to S3 if changed.
-# Copy artifacts to EC2 if changed.
-# Build and start containers in EC2.
+# docker: Build and push Docker image to Docker Hub.
+# check_artifacts: Check build artifacts for changes.
+# push_artifacts: Push artifacts to S3 if changed.
+# deploy_build: Pull artifacts to EC2 and deploy build.
 
 name: 'Deploy Application'
 
@@ -76,7 +75,7 @@ jobs:
             nginx:
               - './build/nginx.conf'
 
-  upload_artifacts:
+  push_artifacts:
     needs: check_artifacts
 
     # Check filters to determine if job should run
@@ -107,3 +106,49 @@ jobs:
       - name: Read from bucket
         run: |
           aws s3 ls s3://${{ secrets.S3_BUCKET }}
+
+  deploy_build:
+    needs: push_artifacts
+    if: always()
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Get code
+        uses: actions/checkout@v6
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      
+      - name: Pull artifacts to EC2
+        run: |
+          aws ssm send-command \
+            --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Pull artifacts from S3" \
+            --parameters commands="\
+              aws s3 cp s3://${{ secrets.S3_BUCKET }}/docker-compose.yml /home/ec2-user/app/docker-compose.yml && \
+              aws s3 cp s3://${{ secrets.S3_BUCKET }}/nginx.conf /home/ec2-user/app/nginx.conf" \
+            --region ${{ secrets.AWS_REGION }}
+
+      - name: Cycle Docker compose
+        run: |
+          aws ssm send-command \
+            --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Stop containers, pull and restart, prune" \
+            --parameters '{
+              "commands": [
+                "echo ${{ secrets.DOCKERHUB_TOKEN }} | /usr/bin/docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin",
+                "/usr/bin/docker compose -f /home/ec2-user/app/docker-compose.yml down",
+                "/usr/bin/docker compose -f /home/ec2-user/app/docker-compose.yml up -d --pull always",
+                "/usr/bin/docker system prune -a -f"
+              ]
+            }' \
+            --region ${{ secrets.AWS_REGION }}
