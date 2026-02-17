@@ -11,9 +11,9 @@ interface Config {
 }
 
 const frontendUrl =
-	process.env.NODE_ENV === 'production'
-		? (process.env.FRONTEND_URL as string)
-		: 'http://localhost:5173';
+	process.env.NODE_ENV === 'development'
+		? 'http://localhost:5173'
+		: (process.env.FRONTEND_URL as string);
 
 const config: Config = {
 	frontendUrl,

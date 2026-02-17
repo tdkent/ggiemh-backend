@@ -6,11 +6,11 @@
 	"main": "server.js",
 	"scripts": {
 		"build": "tsc && tsc-alias",
-		"dev": "tsx watch src/server.ts",
+		"dev": "NODE_ENV=development tsx watch src/server.ts",
 		"lint": "biome check --verbose",
 		"lint:fix": "biome check --write --no-errors-on-unmatched",
 		"prepare": "husky",
-		"start": "NODE_ENV=production node dist/server.js",
+		"start": "node dist/server.js",
 		"test": "vitest"
 	},
 	"lint-staged": {
