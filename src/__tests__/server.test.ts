@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
-import app from '@/app.js';
+import app from '../app.js';
 
 vi.mock('../services/homes.services.ts', () => {
 	return {
