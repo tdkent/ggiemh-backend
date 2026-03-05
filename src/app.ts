@@ -7,6 +7,7 @@ import logRequest from '@middleware/logs.middleware.js';
 import homesRouter from '@routes/homes.routes.js';
 import cors from 'cors';
 import express from 'express';
+import helmet from 'helmet';
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use(
 		origin: config.frontendUrl,
 	})
 );
+
+app.use(helmet());
 
 app.use(logRequest);
 
