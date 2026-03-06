@@ -8,6 +8,7 @@ interface Config {
 	mongoPassword: string;
 	nodeEnv: 'production' | undefined;
 	port: number;
+	sentryDSN: string;
 }
 
 const frontendUrl =
@@ -23,6 +24,7 @@ const config: Config = {
 	mongoUser: process.env.MONGODB_USERNAME as string,
 	nodeEnv: process.env.NODE_ENV as 'production' | undefined,
 	port: Number(process.env.PORT),
+	sentryDSN: process.env.SENTRY_DSN as string,
 };
 
 export default config;

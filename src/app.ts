@@ -1,3 +1,4 @@
+import './instrument.js';
 import config from '@config/config.js';
 import {
 	defaultErrorHandler,
@@ -5,6 +6,7 @@ import {
 } from '@middleware/errors.middleware.js';
 import logRequest from '@middleware/logs.middleware.js';
 import homesRouter from '@routes/homes.routes.js';
+import * as Sentry from '@sentry/node';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
@@ -27,6 +29,8 @@ app.get('/', (_req, res) => {
 });
 
 app.use('/homes', homesRouter);
+
+Sentry.setupExpressErrorHandler(app);
 
 app.use(routeNotFound);
 app.use(defaultErrorHandler);
