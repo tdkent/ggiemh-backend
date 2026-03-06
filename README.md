@@ -15,7 +15,7 @@
 - Database: `MongoDB`
 - Lint &amp; Format: `Biome`, `Husky`
 - Testing: `Vitest`
-- Logging: `Winston`
+- Logging: `Winston`, `Sentry`
 - Deploy: `Docker`, `AWS`
 
 ## Endpoints
@@ -29,7 +29,7 @@
 ## Security
 
 - **CORS**: restricts resource sharing to `ggiemh.com` and local development origins.
-- **NGINX**: an NGINX server is configured as a reverse proxy, intercepting and filtering client requests before sending them to the API.
+- **NGINX**: an NGINX server is configured as a reverse proxy to intercept client requests before sending them to the API.
 - **Helmet**: adds security headers to HTTP responses to help prevent a variety of attacks.
 
 ## Deployment
@@ -103,6 +103,7 @@ MONGODB_CLUSTER=<cluster id>
 MONGODB_USERNAME=<your-username>
 MONGODB_PASSWORD=<your-password>
 MONGODB_DB_NAME=<db-name>
+SENTRY_DSN=<sentry dsn id>
 ```
 
 
