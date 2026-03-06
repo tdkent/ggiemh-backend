@@ -1,6 +1,6 @@
 # Model Homes of the Golden Gate International Exposition, 1939-40
 
-> This documentation is for the **Node.js backend** of [ggiemh.com](https://ggiemh.com).
+> Documentation for the **Node.js backend** of [ggiemh.com](https://ggiemh.com).
 
 ## About
 
@@ -10,13 +10,13 @@
 
 ### Tech Stack
 
-- Language: TypeScript
-- Framework: Express.js
-- Database: MongoDB
-- Lint &amp; Format: Biome w/Husky pre-commit
-- Testing: Vitest
-- Logging: Winston
-- Deploy: Docker, AWS
+- Language: `TypeScript`
+- Framework: `Express.js`
+- Database: `MongoDB`
+- Lint &amp; Format: `Biome`, `Husky`
+- Testing: `Vitest`
+- Logging: `Winston`
+- Deploy: `Docker`, `AWS`
 
 ## Endpoints
 
@@ -30,11 +30,7 @@
 
 - **CORS**: restricts resource sharing to `ggiemh.com` and local development origins.
 - **NGINX**: an NGINX server is configured as a reverse proxy, intercepting and filtering client requests before sending them to the API.
-
-Planned: 
-
-- Rate limiting: configure with NGINX
-- Helmet: adds security headers to HTTP responses to help prevent a variety of attacks.
+- **Helmet**: adds security headers to HTTP responses to help prevent a variety of attacks.
 
 ## Deployment
 
@@ -58,29 +54,36 @@ The backend application is deployed using several AWS cloud services, including:
 - Elastic Compute Cloud (EC2): Provision the computing resources needed to run the application.
 - Application Load Balancer (ALB): Provision a load balancer to handle HTTPS termination, redirect HTTP to HTTPS, and route incoming traffic to EC2.
 
-#### Deployment diagram
+#### Diagram
 
 ```mermaid
 flowchart LR
-    User[User Browser]
-    DNS[Route 53]
-    ALB[Load Balancer]
-    EC2[EC2]
-    NGINX[Nginx reverse proxy]
-    API[Express API]
-    DB[(MongoDB)]
+    User((Browser))
+    AWS(*AWS*
+    Route 53 w/SSL
+    Load Balancer
+    EC2 Instance)
+    API(*API*
+    Docker Compose
+    Nginx Reverse Proxy
+    Express API
+    )
+    DB[(MongoDB Atlas)]
 
-    User --> DNS
-    DNS --> ALB
-    ALB --> EC2
-    EC2 --> NGINX
-    NGINX --> API
+    User --> AWS
+    AWS --> API
     API --> DB
 ```
 
 ## Additional Information
 
-### Running the app locally
+### Links
+- [Frontend repository](https://github.com/tdkent/ggiemh-frontend)
+- [Visit ggiemh.com](https://ggiemh.com)
+
+### Local Development
+
+> How to run the application locally. Requires Node and MongoDB.
 
 With the correct environment variables the application can be run locally, without containers or NGINX, on any port.
 
@@ -121,7 +124,3 @@ npm run test
 # Build
 npm run build
 ```
-
-### Links
-- [Frontend repository](https://github.com/tdkent/ggiemh-frontend)
-- [Visit ggiemh.com](https://ggiemh.com)
